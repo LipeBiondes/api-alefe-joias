@@ -4,6 +4,7 @@ import cors from '@fastify/cors'
 import dotenv from 'dotenv'
 
 const port = parseInt(process.env.PORT ?? '3333')
+const host = 'RENDER' in process.env ? `0.0.0.0` : `localhost`
 
 const app = Fastify({ logger: true })
 
@@ -17,7 +18,7 @@ const start = async () => {
   await app.register(routes)
 
   try {
-    await app.listen({ port: port })
+    await app.listen({ host: host, port: port })
   } catch (err) {
     process.exit(1)
   }
