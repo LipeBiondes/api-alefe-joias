@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "npm install && tsc",
-    "start": "node src/server"
+    "start": "node build/server"
   },
   "keywords": [],
   "author": "",
