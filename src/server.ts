@@ -14,10 +14,15 @@ const start = async () => {
   await app.register(cors)
   await app.register(routes)
 
-  const port = process.env.PORT || 3333
+  var port
+  if (process.env.PORT) {
+    port = parseInt(process.env.PORT)
+  } else {
+    port = 3333
+  }
 
   try {
-    await app.listen({ port: port })
+    await app.listen({ port })
   } catch (err) {
     process.exit(1)
   }
