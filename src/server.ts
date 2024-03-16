@@ -3,6 +3,8 @@ import { routes } from './routes'
 import cors from '@fastify/cors'
 import dotenv from 'dotenv'
 
+const port = parseInt(process.env.PORT ?? '3333')
+
 const app = Fastify({ logger: true })
 
 dotenv.config()
@@ -14,15 +16,8 @@ const start = async () => {
   await app.register(cors)
   await app.register(routes)
 
-  var port
-  if (process.env.PORT) {
-    port = parseInt(process.env.PORT)
-  } else {
-    port = 3333
-  }
-
   try {
-    await app.listen({ port })
+    await app.listen({ port: port })
   } catch (err) {
     process.exit(1)
   }
