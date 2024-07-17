@@ -1,60 +1,8 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-model Funcionarios {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  email      String    @unique
-  password   String
-  admin      Boolean
-  created_at DateTime? @default(now())
-
-  @@map("funcionarios")
-}
-
-model Clientes {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  email      String    @unique
-  phone      String
-  created_at DateTime? @default(now())
-
-  @@map("clientes")
-}
-
-model Produto {
-  id              String @id @default(auto()) @map("_id") @db.ObjectId
-  ref             String @unique
-  brand           String
-  name            String
-  price           Float
-  amount_in_stock Int
-  url_Image       String
-
-  @@map("produtos")
-}
-
-model Pedido {
-  id           String    @id @default(auto()) @map("_id") @db.ObjectId
-  client_id    String
-  employee_id  String
-  products     Json[]
-  total        Float
-  created_at   DateTime? @default(now())
-  delivered_at DateTime?
-  progress     String
-
-  @@map("pedidos")
 }

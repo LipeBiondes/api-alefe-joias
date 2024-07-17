@@ -1,27 +1,24 @@
-import Fastify from 'fastify'
-import { routes } from './routes'
+import fastify from 'fastify'
 import cors from '@fastify/cors'
-import dotenv from 'dotenv'
+import {
+  serializerCompiler,
+  validatorCompiler
+} from 'fastify-type-provider-zod'
 
-const port = parseInt(process.env.PORT ?? '3333')
-const host = 'RENDER' in process.env ? `0.0.0.0` : `localhost`
+import { env } from './env'
+import { errorHandle } from './error-handle'
 
-const app = Fastify({ logger: true })
+const app = fastify()
 
-dotenv.config()
-
-app.setErrorHandler((error, request, reply) => {
-  reply.code(400).send({ message: error.message })
+app.register(cors, {
+  origin: '*'
 })
-const start = async () => {
-  await app.register(cors)
-  await app.register(routes)
 
-  try {
-    await app.listen({ host: host, port: port })
-  } catch (err) {
-    process.exit(1)
-  }
-}
+app.setValidatorCompiler(validatorCompiler)
+app.setSerializerCompiler(serializerCompiler)
 
-start()
+app.setErrorHandler(errorHandle)
+
+app.listen({ port: env.PORT }).then(() => {
+  console.log(`Server is running on: http://localhost:${env.PORT}`)
+})
