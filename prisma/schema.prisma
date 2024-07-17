@@ -6,3 +6,55 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Usuario {
+  id     String @id @default(uuid())
+  nome   String
+  email  String @unique
+  cpf    String
+  numero String
+  senha  String
+
+  pedido Pedido[]
+
+  @@map("usuarios")
+}
+
+model Funcionario {
+  id    String @id @default(uuid())
+  nome  String
+  email String @unique
+  senha String
+
+  Pedido Pedido[]
+
+  @@map("funcionarios")
+}
+
+model Produto {
+  id         String @id @default(uuid())
+  nome       String
+  descricao  String
+  preco      Float
+  quantidade Int
+
+  pedido Pedido[]
+
+  @@map("produtos")
+}
+
+model Pedido {
+  id             String    @id @default(uuid())
+  criadoEm       DateTime  @default(now()) @map("criado_em")
+  finalizado_em  DateTime?
+  total          Float
+  status         String
+  usuario_id     String
+  funcionario_id String
+
+  funcionario Funcionario @relation(fields: [funcionario_id], references: [id])
+  usuario     Usuario     @relation(fields: [usuario_id], references: [id])
+  produtos    Produto[]
+
+  @@map("pedidos")
+}
