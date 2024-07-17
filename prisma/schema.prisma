@@ -15,7 +15,7 @@ model Usuario {
   numero String
   senha  String
 
-  pedido Pedido[]
+  pedidos Pedido[]
 
   @@map("usuarios")
 }
@@ -26,19 +26,22 @@ model Funcionario {
   email String @unique
   senha String
 
-  Pedido Pedido[]
+  pedidos Pedido[]
 
   @@map("funcionarios")
 }
 
 model Produto {
-  id         String @id @default(uuid())
+  id         String  @id @default(uuid())
   nome       String
+  referencia String  @unique
   descricao  String
   preco      Float
   quantidade Int
+  classe_id  String?
 
   pedido Pedido[]
+  classe Classe?  @relation(fields: [classe_id], references: [id])
 
   @@map("produtos")
 }
@@ -47,6 +50,7 @@ model Pedido {
   id             String    @id @default(uuid())
   criadoEm       DateTime  @default(now()) @map("criado_em")
   finalizado_em  DateTime?
+  quantidade     Int
   total          Float
   status         String
   usuario_id     String
@@ -57,4 +61,13 @@ model Pedido {
   produtos    Produto[]
 
   @@map("pedidos")
+}
+
+model Classe {
+  id   String @id @default(uuid())
+  nome String
+
+  produtos Produto[]
+
+  @@map("classes")
 }
